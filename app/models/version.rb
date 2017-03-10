@@ -2,10 +2,13 @@ class Version < ApplicationRecord
   self.primary_key = 'uuid'
 
   belongs_to :page, foreign_key: :page_uuid, required: true, inverse_of: :versions
-  has_one :previous, class_name: 'Version'
 
   def before_create
     self.uuid = SecureRandom.uuid
+  end
+
+  def previous
+    self.page.versions.where('created_at < ?', self.created_at).first
   end
 
   def view_url
