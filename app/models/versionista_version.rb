@@ -1,6 +1,12 @@
 class VersionistaVersion < ApplicationRecord
-  belongs_to :page, class_name: 'VersionistaPage', inverse_of: :versions
+  self.primary_key = 'uuid'
+
+  belongs_to :page, class_name: 'VersionistaPage', foreign_key: :page_uuid, required: true, inverse_of: :versions
   has_one :previous, class_name: 'VersionistaVersion'
+
+  def before_create
+    self.uuid = SecureRandom.uuid
+  end
 
   def view_url
     diff_with_previous_url.sub(/:\w+\/?$/, '/')

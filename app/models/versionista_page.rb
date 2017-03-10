@@ -1,5 +1,11 @@
 class VersionistaPage < ApplicationRecord
-  has_many :versions, -> { order(created_at: :desc) }, class_name: 'VersionistaVersion', foreign_key: 'page_id', inverse_of: :page
+  self.primary_key = 'uuid'
+
+  has_many :versions, -> { order(created_at: :desc) }, class_name: 'VersionistaVersion', foreign_key: 'page_uuid', inverse_of: :page
+
+  def before_create
+    self.uuid = SecureRandom.uuid
+  end
 
   def as_json(*args)
     result = super(*args)

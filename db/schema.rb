@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309010632) do
+ActiveRecord::Schema.define(version: 20170309192020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "uuid-ossp"
 
   create_table "invitations", force: :cascade do |t|
     t.integer  "issuer_id"
@@ -50,7 +51,7 @@ ActiveRecord::Schema.define(version: 20170309010632) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  create_table "versionista_pages", force: :cascade do |t|
+  create_table "versionista_pages", primary_key: "uuid", id: :uuid, default: nil, force: :cascade do |t|
     t.string   "url"
     t.string   "title"
     t.string   "agency"
@@ -62,8 +63,7 @@ ActiveRecord::Schema.define(version: 20170309010632) do
     t.index ["url"], name: "index_versionista_pages_on_url", using: :btree
   end
 
-  create_table "versionista_versions", force: :cascade do |t|
-    t.integer  "page_id"
+  create_table "versionista_versions", primary_key: "uuid", id: :uuid, default: nil, force: :cascade do |t|
     t.integer  "previous_id"
     t.string   "diff_with_previous_url"
     t.string   "diff_with_first_url"
@@ -75,13 +75,12 @@ ActiveRecord::Schema.define(version: 20170309010632) do
     t.datetime "created_at",                            null: false
     t.datetime "updated_at",                            null: false
     t.jsonb    "annotations"
+    t.uuid     "page_uuid",                             null: false
     t.index ["diff_hash"], name: "index_versionista_versions_on_diff_hash", using: :btree
-    t.index ["page_id"], name: "index_versionista_versions_on_page_id", using: :btree
     t.index ["previous_id"], name: "index_versionista_versions_on_previous_id", using: :btree
     t.index ["versionista_version_id"], name: "index_versionista_versions_on_versionista_version_id", using: :btree
   end
 
   add_foreign_key "invitations", "users", column: "issuer_id"
   add_foreign_key "invitations", "users", column: "redeemer_id"
-  add_foreign_key "versionista_versions", "versionista_pages", column: "page_id"
 end
