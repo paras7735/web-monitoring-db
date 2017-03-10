@@ -2,8 +2,8 @@ PAGE_SIZE = 500
 
 class PagesController < ApplicationController
   def index
-    @paging = pagination(VersionistaPage.all)
-    @pages = VersionistaPage.order(updated_at: :desc).limit(PAGE_SIZE).offset(@paging[:offset])
+    @paging = pagination(Page.all)
+    @pages = Page.order(updated_at: :desc).limit(PAGE_SIZE).offset(@paging[:offset])
 
     respond_to do |format|
       format.html
@@ -17,7 +17,7 @@ class PagesController < ApplicationController
   end
 
   def show
-    @page = VersionistaPage.find(params[:id])
+    @page = Page.find(params[:id])
     respond_to do |format|
       format.html do
         @paging = pagination(@page.versions, :pages_page_path)
@@ -37,7 +37,7 @@ class PagesController < ApplicationController
   # Undoubtedly there is a gem that makes this nicer
   def pagination(collection=nil, path_resolver=nil)
     unless collection
-      collection = @collection || VersionistaPage.all
+      collection = @collection || Page.all
     end
 
     unless path_resolver

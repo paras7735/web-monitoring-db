@@ -128,10 +128,10 @@ def update_db_from_data(websites_data)
       page_url = diff_data['URL']
       # Turns out Versionista is currently scraping the same page under multiple scraping routines, resulting in
       # multiple records for the the same page. Use the Versionista URL to keep them separate for now... >:(
-      # page = VersionistaPage.find_by(url: page_url)
-      page = VersionistaPage.find_by(versionista_url: versionista_url)
+      # page = Page.find_by(url: page_url)
+      page = Page.find_by(versionista_url: versionista_url)
       if page.nil?
-        page = VersionistaPage.new(
+        page = Page.new(
           url: page_url,
           title: diff_data['Page name'],
           agency: diff_data['Agency'],
@@ -157,10 +157,10 @@ def update_db_from_data(websites_data)
       versionista_version_id = version_id_match ? version_id_match[1] : nil
       versionista_previous_id = version_id_match ? version_id_match[2] : nil
 
-      version = VersionistaVersion.find_by(page_id: page.id, versionista_version_id: versionista_version_id)
-      previous = VersionistaVersion.find_by(page_id: page.id, versionista_version_id: versionista_previous_id)
+      version = Version.find_by(page_uuid: page.uuid, versionista_version_id: versionista_version_id)
+      previous = Version.find_by(page_uuid: page.uuid, versionista_version_id: versionista_previous_id)
       unless version
-        version = VersionistaVersion.create(
+        version = Version.create(
           versionista_version_id: versionista_version_id,
           page: page,
           previous: previous,

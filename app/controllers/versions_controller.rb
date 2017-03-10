@@ -45,7 +45,7 @@ class VersionsController < ApplicationController
   protected
 
   def page
-    VersionistaPage.find(params[:page_id])
+    Page.find(params[:page_id])
   end
 
   def require_authentication!

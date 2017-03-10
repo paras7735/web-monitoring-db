@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class VersionistaVersionTest < ActiveSupport::TestCase
+class VersionTest < ActiveSupport::TestCase
   test "should have a correct versionista url" do
-    version = VersionistaVersion.new(
-      page: versionista_pages(:one),
+    version = Version.new(
+      page: pages(:one),
       diff_with_previous_url: 'https://versionista.com/74275/6210946/10038376:0/',
       diff_with_first_url: 'https://versionista.com/74275/6210946/10038376:9446087/',
       diff_length: 18489,
@@ -15,7 +15,7 @@ class VersionistaVersionTest < ActiveSupport::TestCase
   end
 
   test "individual annotations should get some metadata" do
-    version = VersionistaVersion.new
+    version = Version.new
     version.annotate({test_field: 'test_value'})
 
     assert_equal 1, version.annotations.length, "The wrong number of annotations were added!"
@@ -27,14 +27,14 @@ class VersionistaVersionTest < ActiveSupport::TestCase
   end
 
   test "adding an annotation should update current_annotation" do
-    version = VersionistaVersion.new
+    version = Version.new
     version.annotate({test_field: 'test_value'})
 
     assert_equal({'test_field' => 'test_value'}, version.current_annotation)
   end
 
   test "annotations should merge by including omitted properties and removing null properties" do
-    version = VersionistaVersion.new
+    version = Version.new
 
     version.annotate({one: 'a', two: 'b', three: 'c'})
     version.annotate({one: 'new!', three: nil})

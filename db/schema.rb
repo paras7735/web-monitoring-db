@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170309192020) do
+ActiveRecord::Schema.define(version: 20170310011739) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,6 +27,18 @@ ActiveRecord::Schema.define(version: 20170309192020) do
     t.index ["code"], name: "index_invitations_on_code", using: :btree
     t.index ["issuer_id"], name: "index_invitations_on_issuer_id", using: :btree
     t.index ["redeemer_id"], name: "index_invitations_on_redeemer_id", using: :btree
+  end
+
+  create_table "pages", primary_key: "uuid", id: :uuid, default: nil, force: :cascade do |t|
+    t.string   "url"
+    t.string   "title"
+    t.string   "agency"
+    t.string   "site"
+    t.string   "versionista_url"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "versionista_account"
+    t.index ["url"], name: "index_pages_on_url", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -51,19 +63,7 @@ ActiveRecord::Schema.define(version: 20170309192020) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
-  create_table "versionista_pages", primary_key: "uuid", id: :uuid, default: nil, force: :cascade do |t|
-    t.string   "url"
-    t.string   "title"
-    t.string   "agency"
-    t.string   "site"
-    t.string   "versionista_url"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.string   "versionista_account"
-    t.index ["url"], name: "index_versionista_pages_on_url", using: :btree
-  end
-
-  create_table "versionista_versions", primary_key: "uuid", id: :uuid, default: nil, force: :cascade do |t|
+  create_table "versions", primary_key: "uuid", id: :uuid, default: nil, force: :cascade do |t|
     t.integer  "previous_id"
     t.string   "diff_with_previous_url"
     t.string   "diff_with_first_url"
@@ -76,9 +76,9 @@ ActiveRecord::Schema.define(version: 20170309192020) do
     t.datetime "updated_at",                            null: false
     t.jsonb    "annotations"
     t.uuid     "page_uuid",                             null: false
-    t.index ["diff_hash"], name: "index_versionista_versions_on_diff_hash", using: :btree
-    t.index ["previous_id"], name: "index_versionista_versions_on_previous_id", using: :btree
-    t.index ["versionista_version_id"], name: "index_versionista_versions_on_versionista_version_id", using: :btree
+    t.index ["diff_hash"], name: "index_versions_on_diff_hash", using: :btree
+    t.index ["previous_id"], name: "index_versions_on_previous_id", using: :btree
+    t.index ["versionista_version_id"], name: "index_versions_on_versionista_version_id", using: :btree
   end
 
   add_foreign_key "invitations", "users", column: "issuer_id"

@@ -1,8 +1,8 @@
-class VersionistaVersion < ApplicationRecord
+class Version < ApplicationRecord
   self.primary_key = 'uuid'
 
-  belongs_to :page, class_name: 'VersionistaPage', foreign_key: :page_uuid, required: true, inverse_of: :versions
-  has_one :previous, class_name: 'VersionistaVersion'
+  belongs_to :page, foreign_key: :page_uuid, required: true, inverse_of: :versions
+  has_one :previous, class_name: 'Version'
 
   def before_create
     self.uuid = SecureRandom.uuid
